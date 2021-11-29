@@ -77,6 +77,10 @@ public abstract class BehaviourManager implements BehaviourManagerInterface{
         return currentBehaviour;
     }
 
+    public Behaviour getWaitBehaviour(){
+        return waitSelector.getBehaviour();
+    }
+
     ///////////////////
     //               //
     //    Setters    //

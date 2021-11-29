@@ -31,6 +31,7 @@ public class Position {
     }
 
     public double getDistance(Position b){
+        if(b == null) return -1;
         double xDist = this.x - b.getX();
         double yDist = this.y - b.getY();
         double result = Math.sqrt(xDist*xDist + yDist*yDist);
@@ -39,6 +40,7 @@ public class Position {
     }
 
     public Direction getDirection(Position b){
+        if(b == null) return null;
         double xDir = b.getX() - x;
         double yDir = b.getY() - y;
         return new Direction(xDir, yDir);

@@ -23,6 +23,7 @@ public class MovePuckTowardsPlayerClosestToOpposingGoalPuckMoveActuator extends 
         double yGoal = (double) game.getHeight() / 2;
         if(playerDisc.getTeam().getTeamEnum() == TeamEnum.HOME) xGoal = game.getWidth();
         PlayerDisc playerDiscClosestToOpoosingGoal = Teammates.getTeammateClosestToOpposingGoal(game, playerDisc);
+        if(playerDiscClosestToOpoosingGoal == null) return PuckMove.NO_MOVE;
         Direction goalDirection = playerDisc.getPosition().getDirection(playerDiscClosestToOpoosingGoal.getPosition());
         int currentAngle = (int)AngleCalculator.getAngleFromDirection(puckDirection, goalDirection);
         // compare to angle after moving clockwise

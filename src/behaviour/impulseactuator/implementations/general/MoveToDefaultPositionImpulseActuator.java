@@ -16,6 +16,13 @@ public class MoveToDefaultPositionImpulseActuator extends ImpulseActuator {
     @Override
     public Impulse getImpulse(){
         Direction direction = playerDisc.getPosition().getDirection(playerDisc.getDefaultPosition());
-        return new Impulse(direction, 1);
+        double distance = playerDisc.getPosition().getDistance(playerDisc.getDefaultPosition());
+        if(distance <= 0.5) return new Impulse(new Direction(0, 0), 0);
+        double acceleration = 1;
+        if(distance <= 100){
+            acceleration = acceleration * (distance / 100);
+        }
+        //System.out.println("acceleration: " + acceleration);
+        return new Impulse(direction, acceleration);
     }
 }

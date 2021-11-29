@@ -18,6 +18,7 @@ public class MoveTowardsTeammateClosestToOpposingGoalImpulseActuator extends Imp
     @Override
     public Impulse getImpulse(){
         PlayerDisc closestTeammateToOpposingGoal = Teammates.getTeammateClosestToOpposingGoal(game, playerDisc);
+        if(closestTeammateToOpposingGoal == null) return new Impulse(new Direction(0,0), 0);
         Direction direction = playerDisc.getPosition().getDirection(closestTeammateToOpposingGoal.getPosition());
         return new Impulse(direction, 1);
     }

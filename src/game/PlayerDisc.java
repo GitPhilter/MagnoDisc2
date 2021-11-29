@@ -59,6 +59,9 @@ public class PlayerDisc {
     public PlayerDiscActuation getActuation(Game game){
         // update behaviour manager
         Behaviour behaviour = behaviourManager.getNextBehaviour();
+        if(game.isWaiting()){
+            behaviour = behaviourManager.getWaitBehaviour();
+        }
         // impulse
         Impulse impulse = behaviour.getImpulse();
         // shot
@@ -112,7 +115,7 @@ public class PlayerDisc {
         if(!PuckGoalCheck.canMoveLeft(game, puck)){
             double difference = (double)puck.getRadius()  - newPuckX;
             newX = newX + difference;
-        } else if(newPuckX >= width - puck.getRadius()){
+        } else if(!PuckGoalCheck.canMoveRight(game, puck)){
             double difference = newPuckX - (width - (double)puck.getRadius());
             newX = newX - difference;
         }
@@ -237,11 +240,17 @@ public class PlayerDisc {
         //System.out.println("Current puck position: " + puck.getPosition());
         puckDirection = puckDirection + 2;
         if(puckDirection > 359) puckDirection = 0;
+        double x = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getX() * (radius + puck.getRadius());
+        double y = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getY() * (radius + puck.getRadius());
+        //puck.setPosition(new Position(x, y));
     }
 
     public void movePuckCounterClockwise(){
         --puckDirection;
         if(puckDirection < 0) puckDirection = 359;
+        double x = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getX() * (radius + puck.getRadius());
+        double y = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getY() * (radius + puck.getRadius());
+        //puck.setPosition(new Position(x, y));
     }
 
     /////////////////////////

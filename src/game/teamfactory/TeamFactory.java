@@ -12,7 +12,7 @@ public final class TeamFactory {
 
 
     public static Team createRandomTeam(int numberOfPlayers, Game game, TeamEnum teamEnum){
-        if(numberOfPlayers > 5 || numberOfPlayers < 2) {
+        if(numberOfPlayers > 5 || numberOfPlayers < 1) {
             return null;
         }
         double width = game.getWidth();
@@ -20,9 +20,27 @@ public final class TeamFactory {
         Color teamColor = ColorGenerator.getRandomColor();
         String teamName = "Testmannschaft";
         Team team = null;
+        if(numberOfPlayers == 1) team = get1PlayerTeam(teamName, teamColor, teamEnum, game);
         if(numberOfPlayers == 2) team = get2PlayerTeam(teamName, teamColor, teamEnum, game);
         if(numberOfPlayers == 3) team = get3PlayerTeam(teamName, teamColor, teamEnum, game);
         if(numberOfPlayers == 4) team = get4PlayerTeam(teamName, teamColor, teamEnum, game);
+        return team;
+    }
+
+    private static Team get1PlayerTeam(String name, Color teamColor, TeamEnum teamEnum, Game game){
+        double xPos = 200;
+        if(teamEnum == TeamEnum.AWAY) xPos = 600;
+        Team team = new Team(name, teamEnum, teamColor);
+        // playerDisc 1
+        PlayerDisc playerDisc1 = new PlayerDisc("PlayerDisc_1", game);
+        Position playerDisc1Position = new Position(xPos, 250);
+        playerDisc1.setPosition(playerDisc1Position);
+        playerDisc1.setDefaultPosition(playerDisc1Position);
+        playerDisc1.setTeam(team);
+        //
+        PlayerDisc[] playerDiscs = new PlayerDisc[1];
+        playerDiscs[0] = playerDisc1;
+        team.setPlayerDiscs(playerDiscs);
         return team;
     }
 

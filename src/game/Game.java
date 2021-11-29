@@ -19,7 +19,9 @@ public class Game {
     Puck puck;
     int width;
     int height;
+    double friction = 0.1;
     boolean running;
+    boolean waiting;
     Display display;
     int numberOfHomeGoals;
     int numberOfAwayGoals;
@@ -46,6 +48,7 @@ public class Game {
         this.arena = new Arena();
         this.display = new Display(this);
         this.running = false;
+        this.waiting = true;
     }
 
     public int getWidth(){
@@ -74,15 +77,17 @@ public class Game {
         if(puck != null){
             if(PuckGoalCheck.isInRightGoal(this, puck)) {
                 System.out.println("The home team scores!");
-                System.out.println("Puck position: " + puck.getPosition());
-                running = false;
+                //System.out.println("Puck position: " + puck.getPosition());
+                waiting = true;
                 ++numberOfHomeGoals;
+                goalReset();
             }
             if(PuckGoalCheck.isInLeftGoal(this, puck)){
                 System.out.println("The away team scores!");
-                System.out.println("Puck position: " + puck.getPosition());
-                running = false;
+                //System.out.println("Puck position: " + puck.getPosition());
+                waiting = true;
                 ++numberOfAwayGoals;
+                goalReset();
             }
 
         }
@@ -139,7 +144,10 @@ public class Game {
             playerDisc.movePlayerDisc();
         } else{
             playerDisc.movePlayerDisc();
-            checkPuckCollision(playerDisc);
+            if(!waiting){
+                checkPuckCollision(playerDisc);
+            }
+
         }
     }
 
@@ -159,10 +167,10 @@ public class Game {
 
     // move to PlayerDisc?
     private void applyImpulseToPlayerDisc(PlayerDisc playerDisc, Impulse impulse){
+        if(impulse == null) return;
         // TODO:apply friction
         //
-
-        if(impulse == null) return;
+        playerDisc.setSpeed(playerDisc.getSpeed() * (1 - friction));
         // direction
         playerDisc.getDirection().addDirection(impulse.getDirection());
         // speed
@@ -200,8 +208,12 @@ public class Game {
     public void run(){
         double fps = 60;
         double NS_PER_FRAME = (double)1000000000 / (double)fps;
-        this.running = true;
+        running = true;
+        waiting = false;
         while(running){
+            if(waiting && waitingIsOver()){
+                waiting = false;
+            }
             double start = System.nanoTime();
             tick();
             double timePassed = System.nanoTime() - start;
@@ -219,6 +231,32 @@ public class Game {
         }
     }
 
+    private boolean waitingIsOver(){
+        for(PlayerDisc playerDisc : playerDiscs){
+            double distance = playerDisc.getPosition().getDistance(playerDisc.getDefaultPosition());
+            if(distance > 0.5){
+                //System.out.println("Default position not yet reached!");
+                //System.out.println("Current Position: " + playerDisc.getPosition() + ". Default Position: " + playerDisc.getDefaultPosition());
+                return false;
+            } else {
+                //System.out.println("+++ DEFAULT POSITION REACHED!!! +++");
+            }
+        }
+        return true;
+    }
+
+    private void goalReset(){
+        System.out.println("Game.goalReset(), the total score is: [ " + numberOfHomeGoals + " - " + numberOfAwayGoals + " ]");
+        puck.setPosition(new Position(400, 250));
+        puck.setDirection(new Direction(0, 0));
+        puck.setSpeed(0);
+        if(puck.getControllingPlayerDisc() != null){
+            puck.getControllingPlayerDisc().setPuck(null);
+            puck.getControllingPlayerDisc().setHasPuck(false);
+        }
+        puck.setControllingPlayerDisc(null);
+    }
+
     public Puck getPuck() {
         return puck;
     }
@@ -234,4 +272,8 @@ public class Game {
    public Team getAwayTeam(){
         return  this.awayTeam;
    }
+
+    public boolean isWaiting() {
+        return waiting;
+    }
 }
