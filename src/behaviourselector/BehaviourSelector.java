@@ -8,15 +8,17 @@ import game.PlayerDisc;
 
 public abstract class BehaviourSelector {
     protected String name;
-    Game game;
-    PlayerDisc playerDisc;
+    protected Game game;
+    protected PlayerDisc playerDisc;
     protected Behaviour[] behaviours;
+    protected Behaviour previousBehaviour;
 
     public BehaviourSelector(String name, Game game, PlayerDisc playerDisc){
         this.name = name;
         this.game = game;
         this.playerDisc = playerDisc;
         this.behaviours = getEmptyBehaviour();
+        this.previousBehaviour = null;
     }
 
     public void setBehaviours(Behaviour[] behaviours){

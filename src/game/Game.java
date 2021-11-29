@@ -4,6 +4,7 @@ package game;
 import behaviour.puckmoveactuator.PuckMove;
 import display.Display;
 import game.physics.*;
+import game.teamfactory.TeamFactory;
 import geometry.AngleCalculator;
 
 import java.awt.*;
@@ -13,8 +14,8 @@ import java.util.Collections;
 public class Game {
     Arena arena;
     ArrayList<PlayerDisc> playerDiscs;
-    PlayerDisc[] homeTeam;
-    PlayerDisc[] awayTeam;
+    Team homeTeam;
+    Team awayTeam;
     Puck puck;
     int width;
     int height;
@@ -30,35 +31,15 @@ public class Game {
         numberOfHomeGoals = 0;
         numberOfAwayGoals = 0;
         // playerDiscs
-        Team homeTeam = new Team("Home-Team", TeamEnum.HOME, Color.YELLOW);
-        Team awayTeam = new Team("Away-Team", TeamEnum.AWAY, Color.RED);
+        homeTeam = TeamFactory.createRandomTeam(4, this, TeamEnum.HOME);
+        awayTeam = TeamFactory.createRandomTeam(4, this, TeamEnum.AWAY);
         this.playerDiscs = new ArrayList<>();
-        this.playerDiscs.add(new PlayerDisc("Disc_1", width, height, this));
-        this.playerDiscs.get(0).setPosition(new Position(500, 150));
-        this.playerDiscs.get(0).setTeam(awayTeam);
-        this.playerDiscs.add(new PlayerDisc("Disc_2", width, height, this));
-        this.playerDiscs.get(1).setPosition(new Position(500, 350));
-        this.playerDiscs.get(1).setTeam(awayTeam);
-        this.playerDiscs.add(new PlayerDisc("Disc_3", width, height, this));
-        this.playerDiscs.get(2).setPosition(new Position(700, 250));
-        this.playerDiscs.get(2).setTeam(awayTeam);
-        this.awayTeam = new PlayerDisc[3];
-        this.awayTeam[0] = playerDiscs.get(0);
-        this.awayTeam[1] = playerDiscs.get(1);
-        this.awayTeam[2] = playerDiscs.get(2);
-        this.playerDiscs.add(new PlayerDisc("Disc_4", width, height, this));
-        this.playerDiscs.get(3).setPosition(new Position(300, 150));
-        this.playerDiscs.get(3).setTeam(homeTeam);
-        this.playerDiscs.add(new PlayerDisc("Disc_5", width, height, this));
-        this.playerDiscs.get(4).setPosition(new Position(300, 350));
-        this.playerDiscs.get(4).setTeam(homeTeam);
-        this.playerDiscs.add(new PlayerDisc("Disc_6", width, height, this));
-        this.playerDiscs.get(5).setPosition(new Position(100, 250));
-        this.playerDiscs.get(5).setTeam(homeTeam);
-        this.homeTeam = new PlayerDisc[3];
-        this.homeTeam[0] = playerDiscs.get(3);
-        this.homeTeam[1] = playerDiscs.get(4);
-        this.homeTeam[2] = playerDiscs.get(5);
+        for(PlayerDisc playerDisc : homeTeam.getPlayerDiscs()){
+            playerDiscs.add(playerDisc);
+        }
+        for(PlayerDisc playerDisc : awayTeam.getPlayerDiscs()){
+            playerDiscs.add(playerDisc);
+        }
         // puck
         puck = new Puck();
         puck.setPosition(new Position(400, 250));
@@ -93,11 +74,13 @@ public class Game {
         if(puck != null){
             if(PuckGoalCheck.isInRightGoal(this, puck)) {
                 System.out.println("The home team scores!");
+                System.out.println("Puck position: " + puck.getPosition());
                 running = false;
                 ++numberOfHomeGoals;
             }
             if(PuckGoalCheck.isInLeftGoal(this, puck)){
                 System.out.println("The away team scores!");
+                System.out.println("Puck position: " + puck.getPosition());
                 running = false;
                 ++numberOfAwayGoals;
             }
@@ -236,18 +219,6 @@ public class Game {
         }
     }
 
-    private double getYSect(Direction direction, Position position, double x){
-        double yPerX = direction.getY() / direction.getX();
-        double xDelta = position.getX() - x;
-        return position.getY() - (yPerX * xDelta);
-    }
-
-    private double getXSect(Direction direction, Position position, double y){
-        double xPerY = direction.getX() / direction.getY();
-        double yDelta = position.getY() - y;
-        return position.getX() - (xPerY * yDelta);
-    }
-
     public Puck getPuck() {
         return puck;
     }
@@ -256,11 +227,11 @@ public class Game {
         return playerDiscs;
    }
 
-   public PlayerDisc[] getHomeTeam(){
+   public Team getHomeTeam(){
         return this.homeTeam;
    }
 
-   public PlayerDisc[] getAwayTeam(){
+   public Team getAwayTeam(){
         return  this.awayTeam;
    }
 }

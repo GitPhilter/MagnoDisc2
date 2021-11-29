@@ -35,11 +35,9 @@ public abstract class Behaviour implements BehaviourInterface{
         return impulseActuator.getImpulse();
     }
 
-
     public Shot getShot() {
         return shotActuator.getShot();
     }
-
 
     public PuckMove getPuckMove(){
         return puckMoveActuator.getPuckMove();

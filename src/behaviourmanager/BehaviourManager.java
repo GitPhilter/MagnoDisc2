@@ -56,7 +56,7 @@ public abstract class BehaviourManager implements BehaviourManagerInterface{
         }
     }
 
-    private void updateTacticState(){
+    protected void updateTacticState(){
         if(game.getPuck().getControllingPlayerDisc() == null){
             tacticState = TacticState.FREE_BALL;
             return;

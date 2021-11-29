@@ -21,7 +21,7 @@ public final class AngleCalculator {
         return getAngleFromDirection(direction, northReference);
     }
 
-    private static double getAngleFromDirection(Direction direction, Direction referenceDirection){
+    public static double getAngleFromDirection(Direction direction, Direction referenceDirection){
         double product = direction.getX() * referenceDirection.getX() + direction.getY() * referenceDirection.getY();
         double lengthProduct = direction.getLength() * referenceDirection.getLength();
         //System.out.println("product: " + product);

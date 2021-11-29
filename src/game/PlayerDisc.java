@@ -4,6 +4,7 @@ import behaviour.Behaviour;
 import behaviour.puckmoveactuator.PuckMove;
 import behaviourmanager.BehaviourManager;
 import behaviourmanager.implementations.EmptyBehaviourManager;
+import behaviourmanager.implementations.StandardBehaviourManager;
 import game.physics.*;
 import geometry.AngleCalculator;
 
@@ -34,13 +35,14 @@ public class PlayerDisc {
     double newPuckX = -1;
     double newPuckY = -1;
     // behaviour
+    Position defaultPosition;
     Team team;
     BehaviourManager behaviourManager;
 
-    public PlayerDisc(String name, int width, int height, Game game){
+    public PlayerDisc(String name, Game game){
         this.name = name;
-        this.width = width;
-        this.height = height;
+        this.width = game.getWidth();
+        this.height = game.getHeight();
         this.position = new Position(-1, -1);
         this.speed = 0;
         this.direction = new Direction(0, 0);
@@ -49,8 +51,9 @@ public class PlayerDisc {
         this.puckDirection = -1;
         this.game = game;
         //
+        this.defaultPosition = null;
         this.team = null;
-        behaviourManager = new EmptyBehaviourManager(game, this);
+        behaviourManager = new StandardBehaviourManager(game, this);
     }
 
     public PlayerDiscActuation getActuation(Game game){
@@ -230,8 +233,8 @@ public class PlayerDisc {
     }
 
     public void movePuckClockwise(){
-        System.out.println("Current puckDirection: " + puckDirection);
-        System.out.println("Current puck position: " + puck.getPosition());
+        //System.out.println("Current puckDirection: " + puckDirection);
+        //System.out.println("Current puck position: " + puck.getPosition());
         puckDirection = puckDirection + 2;
         if(puckDirection > 359) puckDirection = 0;
     }
@@ -328,5 +331,17 @@ public class PlayerDisc {
 
     public Puck getPuck(){
         return puck;
+    }
+
+    public int getPuckDirection(){
+        return puckDirection;
+    }
+
+    public void setDefaultPosition(Position position){
+        defaultPosition = position;
+    }
+
+    public Position getDefaultPosition(){
+        return defaultPosition;
     }
 }

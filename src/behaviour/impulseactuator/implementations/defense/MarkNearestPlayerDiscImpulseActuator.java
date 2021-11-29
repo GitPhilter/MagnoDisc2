@@ -20,9 +20,9 @@ public class MarkNearestPlayerDiscImpulseActuator extends ImpulseActuator {
         Position puckPosition = game.getPuck().getPosition();
         PlayerDisc nearestPlayerDisc = null;
         if(playerDisc.getTeam().getTeamEnum() == TeamEnum.HOME){
-            nearestPlayerDisc = PlayerDiscRelations.getNearestOpponentPlayerDisc(playerDisc, game.getAwayTeam());
+            nearestPlayerDisc = PlayerDiscRelations.getNearestOpponentPlayerDisc(playerDisc, game.getAwayTeam().getPlayerDiscs());
         } else {
-            nearestPlayerDisc = PlayerDiscRelations.getNearestOpponentPlayerDisc(playerDisc, game.getHomeTeam());
+            nearestPlayerDisc = PlayerDiscRelations.getNearestOpponentPlayerDisc(playerDisc, game.getHomeTeam().getPlayerDiscs());
         }
         Direction directionFromNearestPlayerToPuck = nearestPlayerDisc.getPosition().getDirection(game.getPuck().getPosition());
         double focusX = nearestPlayerDisc.getPosition().getX() + directionFromNearestPlayerToPuck.getX() * (playerDisc.getRadius() + nearestPlayerDisc.getRadius());

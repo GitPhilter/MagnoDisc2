@@ -1,6 +1,8 @@
 package behaviour.helpers;
 
+import game.Game;
 import game.PlayerDisc;
+import game.TeamEnum;
 import game.physics.Position;
 
 import java.util.ArrayList;
@@ -18,5 +20,22 @@ public final class PlayerDiscRelations {
             }
         }
         return opposingTeam[resultIndex];
+    }
+
+    public static PlayerDisc getPlayerDiscClosestToPuckFromTeam(Game game, PlayerDisc playerDisc){
+        PlayerDisc[] team = game.getHomeTeam().getPlayerDiscs();
+        if(playerDisc.getTeam().getTeamEnum() == TeamEnum.AWAY) team = game.getAwayTeam().getPlayerDiscs();
+        double shortestDistance = 9999;
+        PlayerDisc result = null;
+        for(PlayerDisc pd : team){
+            if(game.getPuck().getPosition().getDistance(pd.getPosition()) < shortestDistance){
+                //System.out.println("My ASS");
+                shortestDistance = game.getPuck().getPosition().getDistance(pd.getPosition());
+                result = pd;
+            }
+        }
+        //System.out.println("I am: " + playerDisc.getName());
+        //System.out.println("The disc closest to the puck is: " + result.getName());
+        return result;
     }
 }
