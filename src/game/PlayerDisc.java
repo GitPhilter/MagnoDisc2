@@ -123,7 +123,9 @@ public class PlayerDisc {
             double difference = (double)puck.getRadius()  - newPuckY;
             newY = newY + difference;
         } else if(newPuckY >= height - puck.getRadius()){
-            double difference = newPuckY - (width - (double)puck.getRadius());
+            System.out.println("PLayerDisc puck is touching the lower boundary, or worse...!!!");
+            double difference = newPuckY - (height - (double)puck.getRadius());
+            System.out.println("Difference: " + difference);
             newY = newY - difference;
         }
 
@@ -236,20 +238,24 @@ public class PlayerDisc {
     }
 
     public void movePuckClockwise(){
+        //System.out.println("movePuckClockwise()");
         //System.out.println("Current puckDirection: " + puckDirection);
         //System.out.println("Current puck position: " + puck.getPosition());
-        puckDirection = puckDirection + 2;
+        ++puckDirection;
         if(puckDirection > 359) puckDirection = 0;
-        double x = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getX() * (radius + puck.getRadius());
-        double y = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getY() * (radius + puck.getRadius());
+        //double x = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getX() * (radius + puck.getRadius());
+        //double y = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getY() * (radius + puck.getRadius());
+        //setCorrectedNewXYWithPuck();
         //puck.setPosition(new Position(x, y));
     }
 
     public void movePuckCounterClockwise(){
+        //System.out.println("movePuckCounterClockwise()");
         --puckDirection;
         if(puckDirection < 0) puckDirection = 359;
-        double x = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getX() * (radius + puck.getRadius());
-        double y = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getY() * (radius + puck.getRadius());
+        //double x = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getX() * (radius + puck.getRadius());
+        //double y = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getY() * (radius + puck.getRadius());
+        //setCorrectedNewXYWithPuck();
         //puck.setPosition(new Position(x, y));
     }
 

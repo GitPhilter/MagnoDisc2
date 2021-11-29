@@ -29,13 +29,14 @@ public final class AngleCalculator {
         //System.out.println("direction.getX(): " +direction.getX());
         double cosX = product / lengthProduct;
         double result = -1;
-        if(direction.getX() < 0){
+        result = Math.acos(cosX) / (Math.PI) * 180;
+        /*if(direction.getX() < 0){
             result = Math.acos(cosX) / Math.PI * 180 + 180;
             //System.out.println("x < 0: result: " + result);
-
         } else{
             result = Math.acos(cosX) / (Math.PI) * 180;
         }
+         */
         if(result == 360) result = 0;
         return result;
     }
@@ -56,13 +57,12 @@ public final class AngleCalculator {
 
 
     public static boolean isLegalShot(Shot shot, PlayerDisc playerDisc){
-        Direction centerLineForAngleCalculation = playerDisc.getPuck().getPosition().getDirection(playerDisc.getPosition());
+        Direction centerLineForAngleCalculation = playerDisc.getPosition().getDirection(playerDisc.getPuck().getPosition());
         int shotAngle = (int)AngleCalculator.getAngleFromDirection(shot.getDirection(), centerLineForAngleCalculation);
         //System.out.println("ShotAngle = " + shotAngle);
-        if(shotAngle >= 0 && shotAngle <= 90) return true;
-        if(shotAngle >= 270 && shotAngle <= 359) return true;
+        if(shotAngle >= 45) return false;
         //System.out.println("Illegal shot was taken!!! SKANDAL!!!!1");
-        return false;
+        return true;
     }
 
 }

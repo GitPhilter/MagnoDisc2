@@ -16,4 +16,9 @@ public class Shot {
     public double getSpeed() {
         return speed;
     }
+
+    @Override
+    public String toString(){
+        return "[(" + direction.getX() + ", " + direction.getY() + "), " + speed + "]";
+    }
 }

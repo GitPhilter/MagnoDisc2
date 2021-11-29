@@ -23,17 +23,11 @@ public class MovePuckTowardsOpposingGoalPuckMoveActuator extends PuckMoveActuato
         if(playerDisc.getTeam().getTeamEnum() == TeamEnum.HOME) xGoal = game.getWidth();
         Direction goalDirection = playerDisc.getPosition().getDirection(new Position(xGoal, yGoal));
         double currentAngle = AngleCalculator.getAngleFromDirection(puckDirection, goalDirection);
-        // compare to angle after moving clockwise
-        playerDisc.movePuckClockwise();
-        puckDirection = AngleCalculator.getDirectionFromAngle(playerDisc.getPuckDirection());
-        double clockwiseAngle = AngleCalculator.getAngleFromDirection(puckDirection, goalDirection);
-        playerDisc.movePuckCounterClockwise();
-        //System.out.println("currentAngle=" + currentAngle + ", clockwiseAngle=" + clockwiseAngle);
-        if(clockwiseAngle <= currentAngle) {
-            //System.out.println("returning CLOCKWISE");
-            return PuckMove.CLOCKWISE;
-        }
-        //System.out.println("returning COUNTERCLOCKWISE");
+        int clockwiseIncreased = playerDisc.getPuckDirection() + 1;
+        if(clockwiseIncreased > 359) clockwiseIncreased = 0;
+        Direction clockwiseIncreasedDirection = AngleCalculator.getDirectionFromAngle(clockwiseIncreased);
+        double clockwiseIncreasedAngle = AngleCalculator.getAngleFromDirection(clockwiseIncreasedDirection, goalDirection);
+        if(clockwiseIncreasedAngle < currentAngle) return PuckMove.CLOCKWISE;
         return PuckMove.COUNTERCLOCKWISE;
     }
 }

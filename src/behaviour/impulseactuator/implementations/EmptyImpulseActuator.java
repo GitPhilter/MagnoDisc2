@@ -3,6 +3,7 @@ package behaviour.impulseactuator.implementations;
 import behaviour.impulseactuator.ImpulseActuator;
 import game.Game;
 import game.PlayerDisc;
+import game.physics.Direction;
 import game.physics.Impulse;
 
 public class EmptyImpulseActuator extends ImpulseActuator {
@@ -13,6 +14,6 @@ public class EmptyImpulseActuator extends ImpulseActuator {
 
     @Override
     public Impulse getImpulse(){
-        return null;
+        return new Impulse(new Direction(0, 0), 0);
     }
 }

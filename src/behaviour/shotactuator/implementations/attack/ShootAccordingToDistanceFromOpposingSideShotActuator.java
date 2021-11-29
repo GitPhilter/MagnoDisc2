@@ -19,10 +19,13 @@ public class ShootAccordingToDistanceFromOpposingSideShotActuator extends ShotAc
         double xReference = 0;
         if(playerDisc.getTeam().getTeamEnum() == TeamEnum.HOME) xReference = game.getWidth();
         Shot shot = null;
-        if(Math.abs(playerDisc.getPosition().getX() - xReference) <= 100){
+        double distance = Math.abs(playerDisc.getPosition().getX() - xReference);
+        //System.out.println("distance: " + distance);
+        if(distance <= 100){
             double goalY = (double)game.getHeight() / 2;
             Direction direction = playerDisc.getPosition().getDirection(new Position(xReference, goalY));
             shot = new Shot(direction, 6);
+            //System.out.println("Returning Shot: " + shot);
         }
         return shot;
     }

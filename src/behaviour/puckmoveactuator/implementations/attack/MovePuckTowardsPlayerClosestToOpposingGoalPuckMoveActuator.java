@@ -19,18 +19,16 @@ public class MovePuckTowardsPlayerClosestToOpposingGoalPuckMoveActuator extends 
     @Override
     public PuckMove getPuckMove(){
         Direction puckDirection = AngleCalculator.getDirectionFromAngle(playerDisc.getPuckDirection());
-        double xGoal = 0;
-        double yGoal = (double) game.getHeight() / 2;
-        if(playerDisc.getTeam().getTeamEnum() == TeamEnum.HOME) xGoal = game.getWidth();
-        PlayerDisc playerDiscClosestToOpoosingGoal = Teammates.getTeammateClosestToOpposingGoal(game, playerDisc);
-        if(playerDiscClosestToOpoosingGoal == null) return PuckMove.NO_MOVE;
-        Direction goalDirection = playerDisc.getPosition().getDirection(playerDiscClosestToOpoosingGoal.getPosition());
-        int currentAngle = (int)AngleCalculator.getAngleFromDirection(puckDirection, goalDirection);
-        // compare to angle after moving clockwise
-        playerDisc.movePuckClockwise();
-        puckDirection = AngleCalculator.getDirectionFromAngle(playerDisc.getPuckDirection());
-        int clockwiseAngle = (int)AngleCalculator.getAngleFromDirection(puckDirection, goalDirection);
-        if(clockwiseAngle <= currentAngle) return PuckMove.CLOCKWISE;
+
+        PlayerDisc playerDiscClosestToOpposingGoal = Teammates.getTeammateClosestToOpposingGoal(game, playerDisc);
+        if(playerDiscClosestToOpposingGoal == null) return PuckMove.NO_MOVE;
+        Direction teammateDirection = playerDisc.getPosition().getDirection(playerDiscClosestToOpposingGoal.getPosition());
+        double currentAngle = AngleCalculator.getAngleFromDirection(puckDirection, teammateDirection);
+        int clockwiseIncreased = playerDisc.getPuckDirection() + 1;
+        if(clockwiseIncreased > 359) clockwiseIncreased = 0;
+        Direction clockwiseIncreasedDirection = AngleCalculator.getDirectionFromAngle(clockwiseIncreased);
+        double clockwiseIncreasedAngle = AngleCalculator.getAngleFromDirection(clockwiseIncreasedDirection, teammateDirection);
+        if(clockwiseIncreasedAngle < currentAngle) return PuckMove.CLOCKWISE;
         return PuckMove.COUNTERCLOCKWISE;
     }
 }

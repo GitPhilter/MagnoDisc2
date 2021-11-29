@@ -35,13 +35,20 @@ public class Game {
         // playerDiscs
         homeTeam = TeamFactory.createRandomTeam(4, this, TeamEnum.HOME);
         awayTeam = TeamFactory.createRandomTeam(4, this, TeamEnum.AWAY);
+        //awayTeam = null;
         this.playerDiscs = new ArrayList<>();
-        for(PlayerDisc playerDisc : homeTeam.getPlayerDiscs()){
-            playerDiscs.add(playerDisc);
+        if(homeTeam != null){
+            for(PlayerDisc playerDisc : homeTeam.getPlayerDiscs()){
+                playerDiscs.add(playerDisc);
+            }
         }
-        for(PlayerDisc playerDisc : awayTeam.getPlayerDiscs()){
-            playerDiscs.add(playerDisc);
+
+        if(awayTeam != null){
+            for(PlayerDisc playerDisc : awayTeam.getPlayerDiscs()){
+                playerDiscs.add(playerDisc);
+            }
         }
+
         // puck
         puck = new Puck();
         puck.setPosition(new Position(400, 250));
@@ -127,6 +134,7 @@ public class Game {
     }
 
     private void applyPuckMoveToPuck(PlayerDisc playerDisc, PuckMove puckMove){
+        //System.out.println("ApplyPuckMoveToPuck!");
         if(puckMove == PuckMove.CLOCKWISE) {
             playerDisc.movePuckClockwise();
         } else if(puckMove == PuckMove.COUNTERCLOCKWISE) playerDisc.movePuckCounterClockwise();
