@@ -1,6 +1,8 @@
 package game;
 
 
+import behaviour.helpers.PlayerDiscAbsolutePosition;
+import behaviour.helpers.PlayerDiscRelations;
 import behaviour.puckmoveactuator.PuckMove;
 import display.Display;
 import game.physics.*;
@@ -20,11 +22,16 @@ public class Game {
     int width;
     int height;
     double friction = 0.1;
+    double ballPossessionTimeMaximum = 5000; // [ms]
     boolean running;
     boolean waiting;
+    boolean thereWasAFoul;
+    TeamEnum freeshotTeam;
     Display display;
     int numberOfHomeGoals;
     int numberOfAwayGoals;
+
+    double startOfBallPossession;
 
     public Game(){
         this.width = 800;
@@ -34,7 +41,7 @@ public class Game {
         numberOfAwayGoals = 0;
         // playerDiscs
         homeTeam = TeamFactory.createRandomTeam(4, this, TeamEnum.HOME);
-        awayTeam = TeamFactory.createRandomTeam(4, this, TeamEnum.AWAY);
+        awayTeam = TeamFactory.createRandomTeam(2, this, TeamEnum.AWAY);
         //awayTeam = null;
         this.playerDiscs = new ArrayList<>();
         if(homeTeam != null){
@@ -56,6 +63,10 @@ public class Game {
         this.display = new Display(this);
         this.running = false;
         this.waiting = true;
+        this.thereWasAFoul = false;
+        this.freeshotTeam = null;
+        //this.initialPuck = true;
+        this.startOfBallPossession = 0;
     }
 
     public int getWidth(){
@@ -161,13 +172,14 @@ public class Game {
 
     private void checkPuckCollision(PlayerDisc playerDisc){
         if(playerDisc.getPosition().getDistance(puck.getPosition()) < playerDisc.getRadius() + puck.getRadius()){
-            //System.out.println("Collision! Puck and " + playerDisc.getName());
             if(puck.getControllingPlayerDisc() != null){
                 // collision check
             } else {
                 playerDisc.setHasPuck(true);
                 playerDisc.setPuck(puck);
                 puck.setControllingPlayerDisc(playerDisc);
+                //initialPuck = false;
+                startOfBallPossession = System.currentTimeMillis();
             }
 
         }
@@ -176,8 +188,7 @@ public class Game {
     // move to PlayerDisc?
     private void applyImpulseToPlayerDisc(PlayerDisc playerDisc, Impulse impulse){
         if(impulse == null) return;
-        // TODO:apply friction
-        //
+        // friction
         playerDisc.setSpeed(playerDisc.getSpeed() * (1 - friction));
         // direction
         playerDisc.getDirection().addDirection(impulse.getDirection());
@@ -214,15 +225,30 @@ public class Game {
     }
 
     public void run(){
-        double fps = 60;
+        double fps = 24;
         double NS_PER_FRAME = (double)1000000000 / (double)fps;
         running = true;
         waiting = false;
         while(running){
-            if(waiting && waitingIsOver()){
+            if(waiting && !thereWasAFoul && waitingIsOver()){
                 waiting = false;
+            } else if(waiting && thereWasAFoul && waitingIsOver()) {
+                waiting = false;
+                thereWasAFoul = false;
+                System.out.println("applying freeshot in game loop!");
+                applyFreeShot();
             }
             double start = System.nanoTime();
+            double possessionCheck = System.currentTimeMillis();
+            if(puck.getControllingPlayerDisc() != null){
+                double diff = possessionCheck - startOfBallPossession;
+                //System.out.println("possessionCheck [ms]: " + possessionCheck);
+                //System.out.println("startOfBallPossession [ms]: " + startOfBallPossession);
+                //System.out.println(diff);
+                if(diff >= ballPossessionTimeMaximum){
+                    foul();
+                }
+            }
             tick();
             double timePassed = System.nanoTime() - start;
             this.display.repaint();
@@ -242,7 +268,8 @@ public class Game {
     private boolean waitingIsOver(){
         for(PlayerDisc playerDisc : playerDiscs){
             double distance = playerDisc.getPosition().getDistance(playerDisc.getDefaultPosition());
-            if(distance > 0.5){
+            if(distance > 4){
+                //System.out.println(playerDisc.getName() + ":");
                 //System.out.println("Default position not yet reached!");
                 //System.out.println("Current Position: " + playerDisc.getPosition() + ". Default Position: " + playerDisc.getDefaultPosition());
                 return false;
@@ -250,6 +277,7 @@ public class Game {
                 //System.out.println("+++ DEFAULT POSITION REACHED!!! +++");
             }
         }
+        System.out.println("Game.waitingIsOver() = true!");
         return true;
     }
 
@@ -264,6 +292,36 @@ public class Game {
         }
         puck.setControllingPlayerDisc(null);
     }
+
+    public void foul(){
+        System.out.println("There was a foul!");
+        TeamEnum foulTeamEnum = puck.getControllingPlayerDisc().getTeam().getTeamEnum();
+        freeshotTeam  = TeamEnum.UNKNOWN;
+        if(foulTeamEnum == TeamEnum.HOME) freeshotTeam = TeamEnum.AWAY;
+        if(foulTeamEnum == TeamEnum.AWAY) freeshotTeam = TeamEnum.HOME;
+        System.out.println("The " + freeshotTeam.name() + " Team gets a free shot!");
+        goalReset();
+        waiting = true;
+        thereWasAFoul = true;
+    }
+
+    public void applyFreeShot(){
+        PlayerDisc freeshotTeamPlayerDisc = null;
+        for(PlayerDisc playerDisc : playerDiscs){
+            if(playerDisc.getTeam().getTeamEnum() == freeshotTeam){
+                freeshotTeamPlayerDisc = playerDisc;
+                break;
+            }
+        }
+        PlayerDisc recievingDisc = PlayerDiscRelations.getPlayerDiscClosestToPuckFromTeam(this, freeshotTeamPlayerDisc);
+        Direction direction = puck.getPosition().getDirection(recievingDisc.getPosition());
+        Shot shot = new Shot(direction, 6);
+        // give puck new direction and speed
+        puck.setDirection(shot.getDirection());
+        puck.setSpeed(shot.getSpeed());
+    }
+
+
 
     public Puck getPuck() {
         return puck;

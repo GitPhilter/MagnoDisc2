@@ -32,7 +32,7 @@ public final class TeamFactory {
         if(teamEnum == TeamEnum.AWAY) xPos = 600;
         Team team = new Team(name, teamEnum, teamColor);
         // playerDisc 1
-        PlayerDisc playerDisc1 = new PlayerDisc("PlayerDisc_1", game);
+        PlayerDisc playerDisc1 = new PlayerDisc("PlayerDisc_1 (" + teamEnum + ")", game);
         Position playerDisc1Position = new Position(xPos, 250);
         playerDisc1.setPosition(playerDisc1Position);
         playerDisc1.setDefaultPosition(playerDisc1Position);
@@ -49,13 +49,13 @@ public final class TeamFactory {
         if(teamEnum == TeamEnum.AWAY) xPos = 600;
         Team team = new Team(name, teamEnum, teamColor);
         // playerDisc 1
-        PlayerDisc playerDisc1 = new PlayerDisc("PlayerDisc_1", game);
+        PlayerDisc playerDisc1 = new PlayerDisc("PlayerDisc_1 (" + teamEnum + ")", game);
         Position playerDisc1Position = new Position(xPos, 125);
         playerDisc1.setPosition(playerDisc1Position);
         playerDisc1.setDefaultPosition(playerDisc1Position);
         playerDisc1.setTeam(team);
         // playerDisc 2
-        PlayerDisc playerDisc2 = new PlayerDisc("PlayerDisc_2", game);
+        PlayerDisc playerDisc2 = new PlayerDisc("PlayerDisc_2 (" + teamEnum + ")", game);
         Position playerDisc2Position = new Position(xPos, 375);
         playerDisc2.setPosition(playerDisc2Position);
         playerDisc2.setDefaultPosition(playerDisc2Position);
@@ -73,13 +73,13 @@ public final class TeamFactory {
         if(teamEnum == TeamEnum.AWAY) xPos = 700;
         Team team = new Team(name, teamEnum, teamColor);
         // playerDisc 1
-        PlayerDisc playerDisc1 = new PlayerDisc("PlayerDisc_1", game);
+        PlayerDisc playerDisc1 = new PlayerDisc("PlayerDisc_1 (" + teamEnum + ")", game);
         Position playerDisc1Position = new Position(xPos, 125);
         playerDisc1.setPosition(playerDisc1Position);
         playerDisc1.setDefaultPosition(playerDisc1Position);
         playerDisc1.setTeam(team);
         // playerDisc 2
-        PlayerDisc playerDisc2 = new PlayerDisc("PlayerDisc_2", game);
+        PlayerDisc playerDisc2 = new PlayerDisc("PlayerDisc_2 (" + teamEnum + ")", game);
         Position playerDisc2Position = new Position(xPos, 375);
         playerDisc2.setPosition(playerDisc2Position);
         playerDisc2.setDefaultPosition(playerDisc2Position);
@@ -88,7 +88,7 @@ public final class TeamFactory {
         xPos = 250;
         if(teamEnum == TeamEnum.AWAY) xPos = 550;
         // playerDisc 3
-        PlayerDisc playerDisc3 = new PlayerDisc("PlayerDisc_3", game);
+        PlayerDisc playerDisc3 = new PlayerDisc("PlayerDisc_3 (" + teamEnum + ")", game);
         Position playerDisc3Position = new Position(xPos, 250);
         playerDisc3.setPosition(playerDisc3Position);
         playerDisc3.setDefaultPosition(playerDisc3Position);
@@ -107,13 +107,13 @@ public final class TeamFactory {
         if(teamEnum == TeamEnum.AWAY) xPos = 650;
         Team team = new Team(name, teamEnum, teamColor);
         // playerDisc 1
-        PlayerDisc playerDisc1 = new PlayerDisc("PlayerDisc_1", game);
+        PlayerDisc playerDisc1 = new PlayerDisc("PlayerDisc_1 (" + teamEnum + ")", game);
         Position playerDisc1Position = new Position(xPos, 100);
         playerDisc1.setPosition(playerDisc1Position);
         playerDisc1.setDefaultPosition(playerDisc1Position);
         playerDisc1.setTeam(team);
         // playerDisc 2
-        PlayerDisc playerDisc2 = new PlayerDisc("PlayerDisc_2", game);
+        PlayerDisc playerDisc2 = new PlayerDisc("PlayerDisc_2 (" + teamEnum + ")", game);
         Position playerDisc2Position = new Position(xPos, 400);
         playerDisc2.setPosition(playerDisc2Position);
         playerDisc2.setDefaultPosition(playerDisc2Position);
@@ -122,13 +122,13 @@ public final class TeamFactory {
         xPos = 250;
         if(teamEnum == TeamEnum.AWAY) xPos = 550;
         // playerDisc 3
-        PlayerDisc playerDisc3 = new PlayerDisc("PlayerDisc_3", game);
+        PlayerDisc playerDisc3 = new PlayerDisc("PlayerDisc_3 (" + teamEnum + ")", game);
         Position playerDisc3Position = new Position(xPos, 150);
         playerDisc3.setPosition(playerDisc3Position);
         playerDisc3.setDefaultPosition(playerDisc3Position);
         playerDisc3.setTeam(team);
         // playerDisc 4
-        PlayerDisc playerDisc4 = new PlayerDisc("PlayerDisc_4", game);
+        PlayerDisc playerDisc4 = new PlayerDisc("PlayerDisc_4 (" + teamEnum + ")", game);
         Position playerDisc4Position = new Position(xPos, 350);
         playerDisc4.setPosition(playerDisc4Position);
         playerDisc4.setDefaultPosition(playerDisc4Position);

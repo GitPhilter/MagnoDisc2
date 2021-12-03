@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public final class PlayerDiscRelations {
 
-    public static PlayerDisc getNearestOpponentPlayerDisc(PlayerDisc playerDisc, PlayerDisc[] opposingTeam){
+    public static PlayerDisc getClosestOpponenPlayerDisc(PlayerDisc playerDisc, PlayerDisc[] opposingTeam){
         Position playerPosition = playerDisc.getPosition();
         int resultIndex = 0;
         double shortestDistance = 9999;
@@ -21,6 +21,8 @@ public final class PlayerDiscRelations {
         }
         return opposingTeam[resultIndex];
     }
+
+
 
     public static PlayerDisc getPlayerDiscClosestToPuckFromTeam(Game game, PlayerDisc playerDisc){
         PlayerDisc[] team = game.getHomeTeam().getPlayerDiscs();
@@ -36,6 +38,19 @@ public final class PlayerDiscRelations {
         }
         //System.out.println("I am: " + playerDisc.getName());
         //System.out.println("The disc closest to the puck is: " + result.getName());
+        return result;
+    }
+
+    public static PlayerDisc getClosestPlayerDisc(Game game, PlayerDisc playerDisc){
+        double shortestDistance = 9999;
+        PlayerDisc result = null;
+        for(PlayerDisc pd : game.getPlayerDiscs()){
+            if(pd.getPosition().getDistance(playerDisc.getPosition()) < shortestDistance){
+                //System.out.println("My ASS");
+                shortestDistance = pd.getPosition().getDistance(playerDisc.getPosition());
+                result = pd;
+            }
+        }
         return result;
     }
 }

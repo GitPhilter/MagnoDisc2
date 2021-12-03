@@ -1,5 +1,6 @@
 package behaviour.puckmoveactuator.implementations.attack;
 
+import behaviour.helpers.PlayerDiscRelations;
 import behaviour.helpers.Teammates;
 import behaviour.puckmoveactuator.PuckMove;
 import behaviour.puckmoveactuator.PuckMoveActuator;
@@ -19,16 +20,19 @@ public class MovePuckTowardsPlayerClosestToOpposingGoalPuckMoveActuator extends 
     @Override
     public PuckMove getPuckMove(){
         Direction puckDirection = AngleCalculator.getDirectionFromAngle(playerDisc.getPuckDirection());
-
-        PlayerDisc playerDiscClosestToOpposingGoal = Teammates.getTeammateClosestToOpposingGoal(game, playerDisc);
-        if(playerDiscClosestToOpposingGoal == null) return PuckMove.NO_MOVE;
-        Direction teammateDirection = playerDisc.getPosition().getDirection(playerDiscClosestToOpposingGoal.getPosition());
-        double currentAngle = AngleCalculator.getAngleFromDirection(puckDirection, teammateDirection);
-        int clockwiseIncreased = playerDisc.getPuckDirection() + 1;
-        if(clockwiseIncreased > 359) clockwiseIncreased = 0;
-        Direction clockwiseIncreasedDirection = AngleCalculator.getDirectionFromAngle(clockwiseIncreased);
-        double clockwiseIncreasedAngle = AngleCalculator.getAngleFromDirection(clockwiseIncreasedDirection, teammateDirection);
-        if(clockwiseIncreasedAngle < currentAngle) return PuckMove.CLOCKWISE;
+        PlayerDisc alliedPlayerDisc = Teammates.getClosestTeammate(game, playerDisc);
+        Direction direction = playerDisc.getPosition().getDirection(alliedPlayerDisc.getPosition());
+        double angle = AngleCalculator.getAngleFromDirection(direction, puckDirection);
+        //System.out.println("angle: " + angle);
+        if(angle >= -0.5 && angle <= 0.5) {
+            //System.out.println("retuning NO_MOVE");
+            return PuckMove.NO_MOVE;
+        }
+        if(angle > 180) {
+            //System.out.println("retuning CLOCKWISE");
+            return PuckMove.CLOCKWISE;
+        }
+        //System.out.println("returning COUNTERCLOCKWISE");
         return PuckMove.COUNTERCLOCKWISE;
     }
 }

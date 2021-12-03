@@ -8,61 +8,70 @@ import game.physics.Shot;
 public final class AngleCalculator {
 
     public static int getAngleFromTwoPositions(Position a, Position b){
-        double x = a.getX() - b.getX();
-        double y = a.getY() - b.getY();
-        Direction direction = new Direction(x, y);
+        Direction direction = a.getDirection(b);
         double result = getAngleFromDirection(direction);
-        //System.out.println("The angle between " + a.toString() + " and " + b.toString() + " is " + result + "!");
         return (int)result;
     }
 
-    private static double getAngleFromDirection(Direction direction){
+    public static double getAngleFromDirection(Direction direction){
         Direction northReference = new Direction(0, -1);
-        return getAngleFromDirection(direction, northReference);
+        return getAngleFromDirection(northReference, direction);
     }
 
-    public static double getAngleFromDirection(Direction direction, Direction referenceDirection){
-        double product = direction.getX() * referenceDirection.getX() + direction.getY() * referenceDirection.getY();
-        double lengthProduct = direction.getLength() * referenceDirection.getLength();
-        //System.out.println("product: " + product);
-        //System.out.println("lenthProduct: " + lengthProduct);
-        //System.out.println("direction.getX(): " +direction.getX());
-        double cosX = product / lengthProduct;
-        double result = -1;
-        result = Math.acos(cosX) / (Math.PI) * 180;
-        /*if(direction.getX() < 0){
-            result = Math.acos(cosX) / Math.PI * 180 + 180;
-            //System.out.println("x < 0: result: " + result);
-        } else{
-            result = Math.acos(cosX) / (Math.PI) * 180;
+    public static double getAngleFromDirection(Direction referenceDirection, Direction direction){
+        double result = getHalfCircleAngle(direction, referenceDirection);
+        Direction rotatedDirection = getRotationByDegreesClockwise(direction, result);
+        if(result == 360.0) return 0.0;
+        if(result == 0.0) return 0.0;
+        if(twoDirectionsAreIdentical(rotatedDirection, referenceDirection)){
+            return 360 - result;
         }
-         */
-        if(result == 360) result = 0;
         return result;
     }
 
+    public static boolean twoDirectionsAreIdentical(Direction a, Direction b){
+        double clampMargin = 0.01;
+        double xDiff = Math.abs(a.getX() - b.getX());
+        if(xDiff < clampMargin) xDiff = 0.0;
+        double yDiff = Math.abs(a.getY() - b.getY());
+        if(yDiff < clampMargin) yDiff = 0.0;
+        if(xDiff == 0.0 && yDiff == 0.0) return true;
+        //System.out.println(a + " & " + b + " are NOT identical!");
+        return false;
+    }
+
+    public static Direction getRotationByDegreesClockwise(Direction direction, double degrees){
+        degrees = degrees / 180 * Math.PI;
+        double x = Math.cos(degrees) * direction.getX() - Math.sin(degrees) * direction.getY();
+        double y = Math.sin(degrees) * direction.getX() + Math.cos(degrees) * direction.getY();
+        return new Direction(x, y);
+    }
+
+    public static double getHalfCircleAngle(Direction direction, Direction referenceDirection){
+        double product = direction.getX() * referenceDirection.getX() + direction.getY() * referenceDirection.getY();
+        double lengthProduct = direction.getLength() * referenceDirection.getLength();
+        double cosX = product / lengthProduct;
+        return Math.acos(cosX) / (Math.PI) * 180;
+    }
+
+    public static double getExpectedYFromDirectionAndX(Direction direction, double x){
+        if(direction.getY() == 0) return 0;
+        return (x * direction.getX()) / direction.getY();
+    }
+
     public static Direction getDirectionFromAngle(int angle){
-        double angleDouble = (double)angle / 180 * Math.PI;
+        double angleDouble = ((double)angle / 180) * Math.PI;
         if(angleDouble < 0 || angleDouble > 359) return null;
         double xDir = Math.sin(angleDouble);
         double yDir = -Math.cos(angleDouble);
-        //if((angle >= 270 || angle <= 45)){
-        //if((angle >= 270 || angle <= 90)){
-          //  yDir = -1 * yDir;
-        //}
-        Direction direction = new Direction(xDir, yDir);
-        //System.out.println("returning direction : " + direction + ", angle: " + angle);
-        return direction;
+        return new Direction(xDir, yDir);
     }
 
 
     public static boolean isLegalShot(Shot shot, PlayerDisc playerDisc){
         Direction centerLineForAngleCalculation = playerDisc.getPosition().getDirection(playerDisc.getPuck().getPosition());
         int shotAngle = (int)AngleCalculator.getAngleFromDirection(shot.getDirection(), centerLineForAngleCalculation);
-        //System.out.println("ShotAngle = " + shotAngle);
-        if(shotAngle >= 45) return false;
-        //System.out.println("Illegal shot was taken!!! SKANDAL!!!!1");
-        return true;
+        return shotAngle < 45;
     }
 
 }

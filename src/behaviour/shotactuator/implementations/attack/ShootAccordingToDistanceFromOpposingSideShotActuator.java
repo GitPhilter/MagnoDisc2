@@ -21,7 +21,7 @@ public class ShootAccordingToDistanceFromOpposingSideShotActuator extends ShotAc
         Shot shot = null;
         double distance = Math.abs(playerDisc.getPosition().getX() - xReference);
         //System.out.println("distance: " + distance);
-        if(distance <= 100){
+        if(distance <= 200){
             double goalY = (double)game.getHeight() / 2;
             Direction direction = playerDisc.getPosition().getDirection(new Position(xReference, goalY));
             shot = new Shot(direction, 6);

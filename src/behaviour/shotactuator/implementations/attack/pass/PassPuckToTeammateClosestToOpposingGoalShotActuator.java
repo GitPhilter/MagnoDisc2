@@ -19,7 +19,7 @@ public class PassPuckToTeammateClosestToOpposingGoalShotActuator extends ShotAct
     @Override
     public Shot getShot(){
         PlayerDisc teammateClosestToOpposingGoal = Teammates.getTeammateClosestToOpposingGoal(game, playerDisc);
-        if(teammateClosestToOpposingGoal == null) return new Shot(new Direction(0,0), 0);
+        if(teammateClosestToOpposingGoal == null) return null;
         Direction direction = playerDisc.getPosition().getDirection(teammateClosestToOpposingGoal.getPosition());
         return new Shot(direction, 6);
     }

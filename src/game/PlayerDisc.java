@@ -9,6 +9,7 @@ import game.physics.*;
 import geometry.AngleCalculator;
 
 import java.awt.*;
+import java.util.Scanner;
 
 public class PlayerDisc {
     private final String name;
@@ -25,19 +26,23 @@ public class PlayerDisc {
     int radius = 20;
     int innerRadius = (int)(0.8 * radius);
     // moving properties
-    double maxSpeed = 2;
-    double maxAcceleration = 0.5;
+    double maxSpeed = 4;
+    double maxAcceleration = 1;
     double maxBreak = 1;
     Game game;
     // movement
     double newX = -1;
     double newY = -1;
+    double oldX = -1;
+    double oldY = -1;
     double newPuckX = -1;
     double newPuckY = -1;
     // behaviour
     Position defaultPosition;
     Team team;
     BehaviourManager behaviourManager;
+    // output
+    boolean verbose = false;
 
     public PlayerDisc(String name, Game game){
         this.name = name;
@@ -77,8 +82,10 @@ public class PlayerDisc {
             movePlayerDiscWithPuck();
             return;
         }
-        newX = position.getX() + direction.getX() * speed;
-        newY = position.getY() + direction.getY() * speed;
+        int oldX = (int)newX;
+        int oldY = (int)newY;
+        newX = (int)(position.getX() + direction.getX() * speed);
+        newY = (int)(position.getY() + direction.getY() * speed);
         if(newX <= radius){
             newX = radius;
         } else if(newX >= width - radius){
@@ -89,17 +96,20 @@ public class PlayerDisc {
         } else if(newY >= height - radius){
             newY = height - radius;
         }
-        setCorrectedNewXY();
-        this.setPosition(new Position(newX, newY));
+        if(!isLegalPosition(newX, newY)){
+            newX = oldX;
+            newY = oldY;
+        }
+        this.setPosition(new Position((int)newX, (int)newY));
     }
 
     private void movePlayerDiscWithPuck(){
-        //puck.setDirection(direction);
-        //puck.setSpeed(speed);
+        oldX = newX;
+        oldY = newY;
+        double oldPuckX = newPuckX;
+        double oldPuckY = newPuckY;
         newX = position.getX() + direction.getX() * speed;
         newY = position.getY() + direction.getY() * speed;
-        //newPuckX = puck.getPosition().getX() + puck.getDirection().getX() * puck.getSpeed();
-        //newPuckY = puck.getPosition().getY() + puck.getDirection().getY() * puck.getSpeed();
         newPuckX = newX + AngleCalculator.getDirectionFromAngle(puckDirection).getX()  * (radius + puck.getRadius());
         newPuckY = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getY() * (radius + puck.getRadius());
         if(newX <= radius){
@@ -123,108 +133,64 @@ public class PlayerDisc {
             double difference = (double)puck.getRadius()  - newPuckY;
             newY = newY + difference;
         } else if(newPuckY >= height - puck.getRadius()){
-            System.out.println("PLayerDisc puck is touching the lower boundary, or worse...!!!");
             double difference = newPuckY - (height - (double)puck.getRadius());
-            System.out.println("Difference: " + difference);
             newY = newY - difference;
         }
-
-
-        //
-        setCorrectedNewXYWithPuck();
-        puck.setPosition(new Position(newPuckX, newPuckY));
-        this.setPosition(new Position(newX, newY));
+        if(!isLegalPosition(newX, newY)){
+            newX = oldX;
+            newY = oldY;
+            newPuckX = oldPuckX;
+            newPuckY = oldPuckY;
+        }
+        puck.setPosition(new Position((int)newPuckX, (int)newPuckY));
+        this.setPosition(new Position((int)newX, (int)newY));
     }
 
-    private void setCorrectedNewXY(){
-        double correctedNewX = newX;
-        double correctedNewY = newY;
+    public boolean isLegalPosition(double x, double y){
         for(PlayerDisc playerDisc : game.getPlayerDiscs()){
-            if(this == playerDisc) break;
-            double distance = position.getDistance(playerDisc.getPosition());
-            //System.out.println("PlayerDisc.setCorrectedNewXY: distance=" + distance);
-            if(distance <= radius + playerDisc.getRadius()){
-                //System.out.println("newX and newY must be corrected!");
-                Direction correctionDirection = playerDisc.getPosition().getDirection(position);
-                double difference = (radius + playerDisc.getRadius()) - position.getDistance(playerDisc.getPosition());
-                //System.out.println("difference: " + difference);
-                correctedNewX += correctionDirection.getX() * difference;
-                correctedNewY += correctionDirection.getY() * difference;
-                Position deleteMePosition = new Position(newX, newY);
-                double deleteMeDistance = deleteMePosition.getDistance(new Position(correctedNewX, correctedNewY));
-                //System.out.println("The corrected distance is: " + deleteMeDistance);
-                //System.out.println("PlayerDisc collides with other PlayerDisc! Correction distance: " + deleteMeDistance);
+            if(playerDisc != this){
+                Position newTempPosition = new Position(x, y);
+                double distance = newTempPosition.getDistance(playerDisc.getPosition());
+                if(distance < radius + playerDisc.getRadius() - 1){
+                    // TODO: experimental
+                    //Direction correctionDirection = playerDisc.getPosition().getDirection(position);
+                    //double diff = radius + playerDisc.getRadius() - (position.getDistance(playerDisc.getPosition()) - 1);
+                    //System.out.println("diff:" + diff);
+                    //oldX = position.getX() + correctionDirection.getX() * diff;
+                    //newY = position.getY() + correctionDirection.getY() * diff;
+                    //
+                    transferImpulse(playerDisc);
+                    return false;
+                }
+                if(hasPuck){
+                    Position puckPosition = new Position(newPuckX, newPuckY);
+                    distance = puckPosition.getDistance(playerDisc.getPosition());
+                    if(distance < puck.getRadius() + playerDisc.getRadius() - 1){
+                        transferImpulse(playerDisc);
+                        return false;
+                    }
+                }
             }
         }
-        // correct if puck controlled by other player is in the way
+        // check puck
         Puck gamePuck = game.getPuck();
-        if(gamePuck.getControllingPlayerDisc() != null){
-            double puckDistance = position.getDistance(gamePuck.getPosition());
-            if(puckDistance <= gamePuck.getRadius() + radius) {
-                //System.out.println("player collides with owned puck: newX and newY must be corrected!");
-                Direction correctionDirection = gamePuck.getPosition().getDirection(position);
-                double difference = (gamePuck.getRadius() + radius) - position.getDistance(gamePuck.getPosition());
-                //System.out.println("player collides: difference: " + difference);
-                correctedNewX += correctionDirection.getX() * difference;
-                correctedNewY += correctionDirection.getY() * difference;
-                //Position deleteMePosition = new Position(correctedNewX, correctedNewY);
-                //double deleteMeDistance = deleteMePosition.getDistance(gamePuck.getPosition());
-                //Position debugPosition = new Position(newX, newY);
-                //double debugDistance = debugPosition.getDistance(new Position(correctedNewX, correctedNewY));
-                //System.out.println("PlayerDisc collides with Owned Puck! Correction distance: " + debugDistance);
+        if(!hasPuck && gamePuck.getControllingPlayerDisc() != null){
+            Position newTempPosition = new Position(x, y);
+            double distance = newTempPosition.getDistance(gamePuck.getPosition());
+            if(distance < radius + gamePuck.getRadius() - 1){
+                transferImpulse(gamePuck.getControllingPlayerDisc());
+                return false;
             }
         }
-
-        newX = correctedNewX;
-        newY = correctedNewY;
+        return true;
     }
 
-    private void setCorrectedNewXYWithPuck(){
-        double correctedNewX = newX;
-        double correctedNewY = newY;
-        double correctedNewPuckX  = newPuckX;
-        double correctedNewPuckY = newPuckY;
-        for(PlayerDisc playerDisc : game.getPlayerDiscs()){
-            if(this == playerDisc) break;
-            double distance = position.getDistance(playerDisc.getPosition());
-            //System.out.println("PlayerDisc.setCorrectedNewXY: distance=" + distance);
-            if(distance <= radius + playerDisc.getRadius()){
-                //System.out.println("newX and newY must be corrected!");
-                Direction correctionDirection = playerDisc.getPosition().getDirection(position);
-                double difference = (radius + playerDisc.getRadius()) - position.getDistance(playerDisc.getPosition());
-                //System.out.println("difference: " + difference);
-                correctedNewX += correctionDirection.getX() * difference;
-                correctedNewY += correctionDirection.getY() * difference;
-                Position deleteMePosition = new Position(newX, newY);
-                //double deleteMeDistance = deleteMePosition.getDistance(playerDisc.getPosition());
-                //System.out.println("The corrected distance is: " + deleteMeDistance);
-                //double debugDistance = deleteMePosition.getDistance(new Position(correctedNewX, correctedNewY));
-                //System.out.println("PlayerDisc with Puck collides with another PlayerDisc! Correction distance: " + debugDistance);
-            }
-            double puckDistance = playerDisc.getPosition().getDistance(new Position(correctedNewPuckX, correctedNewPuckY));
-            if(puckDistance <= puck.getRadius() + playerDisc.getRadius()){
-                //System.out.println("PUCK: newX and newY must be corrected!");
-                Direction correctionDirection = playerDisc.getPosition().getDirection(puck.getPosition());
-                //System.out.println("CorrectionDirection: " + correctionDirection);
-                double difference = (puck.getRadius() + playerDisc.getRadius()) - playerDisc.getPosition().getDistance(new Position(correctedNewPuckX, correctedNewPuckY));
-                //System.out.println("PUCK: difference: " + difference);
-                // correct this playerDisc as well
-                //System.out.println("old x: " + newPuckX + ". new x: " + correctedNewPuckX);
-                correctedNewX += correctionDirection.getX() * difference;
-                correctedNewY += correctionDirection.getY() * difference;
-                correctedNewPuckX += correctionDirection.getX() * difference;
-                correctedNewPuckY += correctionDirection.getY() * difference;
-                //System.out.println("old x: " + newPuckX + " . new x: " + correctedNewPuckX);
-                //System.out.println("PUCK: The corrected distance is: " + deleteMeDistance);
-                //Position debugPosition = new Position(newPuckX, newPuckY);
-                //double debugDistance = debugPosition.getDistance(new Position(correctedNewPuckX, correctedNewPuckY));
-                //System.out.println("Owned Puck collides with another PlayerDisc! Correction distance: " + debugDistance);
-            }
-        }
-        newX = correctedNewX;
-        newY = correctedNewY;
-        newPuckX = correctedNewPuckX;
-        newPuckY = correctedNewPuckY;
+    private void transferImpulse(PlayerDisc playerDisc){
+        double xRandom = Math.random();
+        double yRandom = Math.random();
+        Direction randomDirection = new Direction(xRandom, yRandom);
+        randomDirection.addDirection(direction);
+        playerDisc.getDirection().addDirection(randomDirection);
     }
 
     @Override
@@ -241,7 +207,7 @@ public class PlayerDisc {
         //System.out.println("movePuckClockwise()");
         //System.out.println("Current puckDirection: " + puckDirection);
         //System.out.println("Current puck position: " + puck.getPosition());
-        ++puckDirection;
+        puckDirection = puckDirection + 10;
         if(puckDirection > 359) puckDirection = 0;
         //double x = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getX() * (radius + puck.getRadius());
         //double y = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getY() * (radius + puck.getRadius());
@@ -251,7 +217,7 @@ public class PlayerDisc {
 
     public void movePuckCounterClockwise(){
         //System.out.println("movePuckCounterClockwise()");
-        --puckDirection;
+        puckDirection = puckDirection - 10;
         if(puckDirection < 0) puckDirection = 359;
         //double x = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getX() * (radius + puck.getRadius());
         //double y = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getY() * (radius + puck.getRadius());
@@ -305,7 +271,7 @@ public class PlayerDisc {
     public void setPuck(Puck puck) {
         if(puck == null) return;
         this.puck = puck;
-        this.puckDirection = AngleCalculator.getAngleFromTwoPositions(puck.getPosition(), position);
+        this.puckDirection = AngleCalculator.getAngleFromTwoPositions(position, puck.getPosition());
     }
 
     public void setDirection(Direction direction) {
