@@ -2,14 +2,10 @@ package behaviourselector.implementations.freeball;
 
 import behaviour.Behaviour;
 import behaviour.helpers.PlayerDiscRelations;
-import behaviour.implementations.attack.pass.StandardPassBehaviour;
-import behaviour.implementations.attack.score.StandardScoreBehaviour;
 import behaviour.implementations.general.HoldDefaultPositionBehaviour;
-import behaviour.implementations.general.MoveBackBehaviour;
-import behaviour.implementations.general.MoveForwardBehaviour;
 import behaviour.implementations.general.MoveTowardsPuckBehaviour;
 import behaviourselector.BehaviourSelector;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 
 public class StandardFreeballSelector extends BehaviourSelector {

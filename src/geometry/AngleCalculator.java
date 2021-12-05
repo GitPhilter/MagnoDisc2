@@ -5,6 +5,8 @@ import game.physics.Direction;
 import game.physics.Position;
 import game.physics.Shot;
 
+import java.awt.*;
+
 public final class AngleCalculator {
 
     public static int getAngleFromTwoPositions(Position a, Position b){
@@ -23,14 +25,19 @@ public final class AngleCalculator {
         Direction rotatedDirection = getRotationByDegreesClockwise(direction, result);
         if(result == 360.0) return 0.0;
         if(result == 0.0) return 0.0;
+        //System.out.println("direction: " + direction);
+        //System.out.println("rotatedDirection: " + rotatedDirection);
+        //System.out.println("referenceDirection: " + referenceDirection);
         if(twoDirectionsAreIdentical(rotatedDirection, referenceDirection)){
+            //System.out.println("The two directions are considered identical!");
+            //System.out.println("returning: 360 - " + result);
             return 360 - result;
         }
         return result;
     }
 
     public static boolean twoDirectionsAreIdentical(Direction a, Direction b){
-        double clampMargin = 0.01;
+        double clampMargin = 0.1;
         double xDiff = Math.abs(a.getX() - b.getX());
         if(xDiff < clampMargin) xDiff = 0.0;
         double yDiff = Math.abs(a.getY() - b.getY());

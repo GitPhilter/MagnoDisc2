@@ -1,6 +1,6 @@
 package behaviour.helpers;
 
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 
 public final class PlayerDiscAbsolutePosition {

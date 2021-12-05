@@ -5,7 +5,7 @@ import behaviour.helpers.PlayerDiscRelations;
 import behaviour.implementations.general.HoldDefaultPositionBehaviour;
 import behaviour.implementations.general.MoveTowardsPuckBehaviour;
 import behaviourselector.BehaviourSelector;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 
 public class StandardDefenseSelector extends BehaviourSelector {

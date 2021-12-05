@@ -1,7 +1,7 @@
 package behaviourmanager.implementations;
 
 import behaviourmanager.BehaviourManager;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 
 public class EmptyBehaviourManager extends BehaviourManager {

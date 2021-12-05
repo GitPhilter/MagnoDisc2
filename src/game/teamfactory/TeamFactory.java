@@ -1,6 +1,6 @@
 package game.teamfactory;
 
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.Team;
 import game.TeamEnum;

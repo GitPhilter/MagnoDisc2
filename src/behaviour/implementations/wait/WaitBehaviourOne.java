@@ -1,13 +1,11 @@
 package behaviour.implementations.wait;
 
 import behaviour.Behaviour;
-import behaviour.impulseactuator.implementations.freeball.FreeBallImpulseActuatorOne;
 import behaviour.impulseactuator.implementations.wait.WaitImpulseActuatorOne;
 import behaviour.puckmoveactuator.PuckMove;
 import behaviour.puckmoveactuator.implementations.wait.WaitPuckMoveActuatorOne;
-import behaviour.shotactuator.implementations.freeball.FreeBallShotActuatorOne;
 import behaviour.shotactuator.implementations.wait.WaitShotActuatorOne;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.physics.Impulse;
 import game.physics.Shot;

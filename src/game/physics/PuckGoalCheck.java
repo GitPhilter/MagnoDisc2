@@ -1,6 +1,6 @@
 package game.physics;
 
-import game.Game;
+import game.game.Game;
 import game.Puck;
 
 public final class PuckGoalCheck {

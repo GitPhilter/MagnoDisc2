@@ -1,6 +1,6 @@
 package behaviour.puckmoveactuator;
 
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 
 public abstract class PuckMoveActuator {

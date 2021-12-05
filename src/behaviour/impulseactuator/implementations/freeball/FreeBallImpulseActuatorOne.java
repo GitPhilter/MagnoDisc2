@@ -1,7 +1,7 @@
 package behaviour.impulseactuator.implementations.freeball;
 
 import behaviour.impulseactuator.ImpulseActuator;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.physics.Direction;
 import game.physics.Impulse;

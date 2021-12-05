@@ -1,6 +1,6 @@
 package behaviour.impulseactuator;
 
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.physics.Impulse;
 

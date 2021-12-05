@@ -1,7 +1,6 @@
 package display;
 
-import game.Arena;
-import game.Game;
+import game.game.Game;
 
 import javax.swing.*;
 import java.awt.*;

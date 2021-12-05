@@ -1,11 +1,9 @@
 package behaviour.helpers;
 
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.TeamEnum;
 import game.physics.Position;
-
-import java.util.ArrayList;
 
 public final class PlayerDiscRelations {
 

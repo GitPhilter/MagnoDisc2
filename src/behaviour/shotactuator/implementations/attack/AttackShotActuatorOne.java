@@ -2,7 +2,7 @@ package behaviour.shotactuator.implementations.attack;
 
 import behaviour.helpers.PlayerDiscAbsolutePosition;
 import behaviour.shotactuator.ShotActuator;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.TeamEnum;
 import game.physics.Direction;

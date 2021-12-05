@@ -1,13 +1,10 @@
 package behaviour.implementations.general;
 
 import behaviour.Behaviour;
-import behaviour.impulseactuator.implementations.attack.AttackImpulseActuatorOne;
 import behaviour.impulseactuator.implementations.general.MoveBackImpulseActuator;
 import behaviour.puckmoveactuator.implementations.EmptyPuckMoveActuator;
-import behaviour.puckmoveactuator.implementations.attack.AttackPuckMoveActuatorOne;
 import behaviour.shotactuator.implementations.EmptyShotActuator;
-import behaviour.shotactuator.implementations.attack.AttackShotActuatorOne;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 
 public class MoveBackBehaviour extends Behaviour {

@@ -2,12 +2,10 @@ package behaviour.impulseactuator.implementations.attack;
 
 import behaviour.helpers.Teammates;
 import behaviour.impulseactuator.ImpulseActuator;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
-import game.TeamEnum;
 import game.physics.Direction;
 import game.physics.Impulse;
-import game.physics.Position;
 
 public class MoveTowardsTeammateClosestToOpposingGoalImpulseActuator extends ImpulseActuator {
 

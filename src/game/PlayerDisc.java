@@ -3,16 +3,15 @@ package game;
 import behaviour.Behaviour;
 import behaviour.puckmoveactuator.PuckMove;
 import behaviourmanager.BehaviourManager;
-import behaviourmanager.implementations.EmptyBehaviourManager;
 import behaviourmanager.implementations.StandardBehaviourManager;
+import game.game.Game;
 import game.physics.*;
 import geometry.AngleCalculator;
 
 import java.awt.*;
-import java.util.Scanner;
 
 public class PlayerDisc {
-    private final String name;
+    protected final String name;
     int width; // game width
     int height; // game height
     private Position position;
@@ -26,7 +25,8 @@ public class PlayerDisc {
     int radius = 20;
     int innerRadius = (int)(0.8 * radius);
     // moving properties
-    double maxSpeed = 4;
+    double maxSpeed = 5.6;
+    double maxShootingSpeed = 10;
     double maxAcceleration = 1;
     double maxBreak = 1;
     Game game;
@@ -39,8 +39,8 @@ public class PlayerDisc {
     double newPuckY = -1;
     // behaviour
     Position defaultPosition;
-    Team team;
-    BehaviourManager behaviourManager;
+    protected Team team;
+    protected BehaviourManager behaviourManager;
     // output
     boolean verbose = false;
 
@@ -82,8 +82,8 @@ public class PlayerDisc {
             movePlayerDiscWithPuck();
             return;
         }
-        int oldX = (int)newX;
-        int oldY = (int)newY;
+        oldX = (int)newX;
+        oldY = (int)newY;
         newX = (int)(position.getX() + direction.getX() * speed);
         newY = (int)(position.getY() + direction.getY() * speed);
         if(newX <= radius){
@@ -174,7 +174,7 @@ public class PlayerDisc {
         }
         // check puck
         Puck gamePuck = game.getPuck();
-        if(!hasPuck && gamePuck.getControllingPlayerDisc() != null){
+        if(gamePuck != null && !hasPuck && gamePuck.getControllingPlayerDisc() != null){
             Position newTempPosition = new Position(x, y);
             double distance = newTempPosition.getDistance(gamePuck.getPosition());
             if(distance < radius + gamePuck.getRadius() - 1){
@@ -208,7 +208,7 @@ public class PlayerDisc {
         //System.out.println("Current puckDirection: " + puckDirection);
         //System.out.println("Current puck position: " + puck.getPosition());
         puckDirection = puckDirection + 10;
-        if(puckDirection > 359) puckDirection = 0;
+        if(puckDirection > 359) puckDirection = 0 + (puckDirection - 360);
         //double x = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getX() * (radius + puck.getRadius());
         //double y = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getY() * (radius + puck.getRadius());
         //setCorrectedNewXYWithPuck();
@@ -218,7 +218,7 @@ public class PlayerDisc {
     public void movePuckCounterClockwise(){
         //System.out.println("movePuckCounterClockwise()");
         puckDirection = puckDirection - 10;
-        if(puckDirection < 0) puckDirection = 359;
+        if(puckDirection < 0) puckDirection = 359 - Math.abs(puckDirection);
         //double x = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getX() * (radius + puck.getRadius());
         //double y = newY + AngleCalculator.getDirectionFromAngle(puckDirection).getY() * (radius + puck.getRadius());
         //setCorrectedNewXYWithPuck();
@@ -324,5 +324,9 @@ public class PlayerDisc {
 
     public Position getDefaultPosition(){
         return defaultPosition;
+    }
+
+    public double getMaxShootingSpeed(){
+        return maxShootingSpeed;
     }
 }

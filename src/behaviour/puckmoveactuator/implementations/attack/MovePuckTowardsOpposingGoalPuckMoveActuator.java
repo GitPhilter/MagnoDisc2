@@ -2,7 +2,7 @@ package behaviour.puckmoveactuator.implementations.attack;
 
 import behaviour.puckmoveactuator.PuckMove;
 import behaviour.puckmoveactuator.PuckMoveActuator;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.TeamEnum;
 import game.physics.Direction;
@@ -22,14 +22,16 @@ public class MovePuckTowardsOpposingGoalPuckMoveActuator extends PuckMoveActuato
         double yGoal = (double) game.getHeight() / 2;
         if(playerDisc.getTeam().getTeamEnum() == TeamEnum.HOME) xGoal = game.getWidth();
         Direction goalDirection = playerDisc.getPosition().getDirection(new Position(xGoal, yGoal));
+        //System.out.println("puckDirection: " + puckDirection);
+        //System.out.println("goalDirection: " + goalDirection);
         double angle = AngleCalculator.getAngleFromDirection(goalDirection, puckDirection);
         //System.out.println("angle: " + angle);
         if(angle >= -0.5 && angle <= 0.5) {
-            //System.out.println("retuning NO_MOVE");
+            //System.out.println("returning NO_MOVE");
             return PuckMove.NO_MOVE;
         }
         if(angle > 180) {
-            //System.out.println("retuning CLOCKWISE");
+            //System.out.println("returning CLOCKWISE");
             return PuckMove.CLOCKWISE;
         }
         //System.out.println("returning COUNTERCLOCKWISE");

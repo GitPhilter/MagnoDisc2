@@ -1,14 +1,11 @@
 package behaviour.puckmoveactuator.implementations.attack;
 
-import behaviour.helpers.PlayerDiscRelations;
 import behaviour.helpers.Teammates;
 import behaviour.puckmoveactuator.PuckMove;
 import behaviour.puckmoveactuator.PuckMoveActuator;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
-import game.TeamEnum;
 import game.physics.Direction;
-import game.physics.Position;
 import geometry.AngleCalculator;
 
 public class MovePuckTowardsPlayerClosestToOpposingGoalPuckMoveActuator extends PuckMoveActuator {
@@ -21,6 +18,7 @@ public class MovePuckTowardsPlayerClosestToOpposingGoalPuckMoveActuator extends 
     public PuckMove getPuckMove(){
         Direction puckDirection = AngleCalculator.getDirectionFromAngle(playerDisc.getPuckDirection());
         PlayerDisc alliedPlayerDisc = Teammates.getClosestTeammate(game, playerDisc);
+        if(alliedPlayerDisc == null) return PuckMove.NO_MOVE;
         Direction direction = playerDisc.getPosition().getDirection(alliedPlayerDisc.getPosition());
         double angle = AngleCalculator.getAngleFromDirection(direction, puckDirection);
         //System.out.println("angle: " + angle);

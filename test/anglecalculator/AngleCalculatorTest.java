@@ -1,11 +1,8 @@
 package anglecalculator;
 
-import game.PlayerDisc;
 import game.physics.Direction;
 import game.physics.Position;
-import game.physics.Shot;
 import geometry.AngleCalculator;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

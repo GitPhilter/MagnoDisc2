@@ -2,12 +2,9 @@ package behaviour.shotactuator.implementations.attack.pass;
 
 import behaviour.helpers.Teammates;
 import behaviour.shotactuator.ShotActuator;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
-import game.TeamEnum;
 import game.physics.Direction;
-import game.physics.Impulse;
-import game.physics.Position;
 import game.physics.Shot;
 
 public class PassPuckToTeammateClosestToOpposingGoalShotActuator extends ShotActuator {
@@ -21,6 +18,6 @@ public class PassPuckToTeammateClosestToOpposingGoalShotActuator extends ShotAct
         PlayerDisc teammateClosestToOpposingGoal = Teammates.getTeammateClosestToOpposingGoal(game, playerDisc);
         if(teammateClosestToOpposingGoal == null) return null;
         Direction direction = playerDisc.getPosition().getDirection(teammateClosestToOpposingGoal.getPosition());
-        return new Shot(direction, 6);
+        return new Shot(direction, playerDisc.getMaxShootingSpeed());
     }
 }

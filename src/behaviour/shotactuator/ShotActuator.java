@@ -1,6 +1,6 @@
 package behaviour.shotactuator;
 
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.physics.Shot;
 

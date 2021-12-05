@@ -1,9 +1,8 @@
 package behaviour.impulseactuator.implementations.general;
 
 import behaviour.impulseactuator.ImpulseActuator;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
-import game.TeamEnum;
 import game.physics.Direction;
 import game.physics.Impulse;
 
@@ -20,7 +19,7 @@ public class MoveToDefaultPositionImpulseActuator extends ImpulseActuator {
         if(distance <= 2) return new Impulse(new Direction(0, 0), 0);
         double acceleration = 1;
         if(distance <= 10){
-            return new Impulse(direction, acceleration * 0.5);
+            return new Impulse(direction, acceleration * 0.1);
         }
         //System.out.println("acceleration: " + acceleration);
         return new Impulse(direction, acceleration);

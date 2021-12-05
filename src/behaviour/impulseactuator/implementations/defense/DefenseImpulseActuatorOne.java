@@ -1,7 +1,7 @@
 package behaviour.impulseactuator.implementations.defense;
 
 import behaviour.impulseactuator.ImpulseActuator;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.physics.Direction;
 import game.physics.Impulse;

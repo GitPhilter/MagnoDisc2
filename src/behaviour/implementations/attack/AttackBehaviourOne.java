@@ -5,7 +5,7 @@ import behaviour.impulseactuator.implementations.attack.AttackImpulseActuatorOne
 import behaviour.puckmoveactuator.PuckMove;
 import behaviour.puckmoveactuator.implementations.attack.AttackPuckMoveActuatorOne;
 import behaviour.shotactuator.implementations.attack.AttackShotActuatorOne;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.physics.Impulse;
 import game.physics.Shot;

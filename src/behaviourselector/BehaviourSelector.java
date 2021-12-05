@@ -2,7 +2,7 @@ package behaviourselector;
 
 import behaviour.Behaviour;
 import behaviour.implementations.EmptyBehaviour;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 
 

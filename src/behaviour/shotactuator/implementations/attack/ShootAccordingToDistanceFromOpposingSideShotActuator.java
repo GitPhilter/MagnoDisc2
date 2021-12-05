@@ -1,7 +1,7 @@
 package behaviour.shotactuator.implementations.attack;
 
 import behaviour.shotactuator.ShotActuator;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.TeamEnum;
 import game.physics.Direction;
@@ -24,7 +24,7 @@ public class ShootAccordingToDistanceFromOpposingSideShotActuator extends ShotAc
         if(distance <= 200){
             double goalY = (double)game.getHeight() / 2;
             Direction direction = playerDisc.getPosition().getDirection(new Position(xReference, goalY));
-            shot = new Shot(direction, 6);
+            shot = new Shot(direction, playerDisc.getMaxShootingSpeed());
             //System.out.println("Returning Shot: " + shot);
         }
         return shot;

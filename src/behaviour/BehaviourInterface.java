@@ -1,7 +1,6 @@
 package behaviour;
 
 import behaviour.puckmoveactuator.PuckMove;
-import game.Game;
 import game.physics.Impulse;
 import game.physics.Shot;
 

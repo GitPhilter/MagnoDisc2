@@ -1,14 +1,12 @@
 package behaviourmanager.implementations;
 
-import behaviour.Behaviour;
 import behaviourmanager.BehaviourManager;
 import behaviourmanager.TacticState;
-import behaviourselector.implementations.EmptyBehaviourSelector;
 import behaviourselector.implementations.attack.StandardAttackSelector;
 import behaviourselector.implementations.defense.StandardDefenseSelector;
 import behaviourselector.implementations.freeball.StandardFreeballSelector;
 import behaviourselector.implementations.wait.StandardWaitSelector;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 
 public class StandardBehaviourManager extends BehaviourManager {

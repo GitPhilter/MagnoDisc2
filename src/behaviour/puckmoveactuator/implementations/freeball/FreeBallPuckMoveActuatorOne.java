@@ -2,7 +2,7 @@ package behaviour.puckmoveactuator.implementations.freeball;
 
 import behaviour.puckmoveactuator.PuckMove;
 import behaviour.puckmoveactuator.PuckMoveActuator;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 
 public class FreeBallPuckMoveActuatorOne extends PuckMoveActuator {

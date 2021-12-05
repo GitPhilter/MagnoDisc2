@@ -1,12 +1,11 @@
 package behaviour.implementations.defense;
 
 import behaviour.Behaviour;
-import behaviour.impulseactuator.implementations.defense.DefenseImpulseActuatorOne;
 import behaviour.impulseactuator.implementations.defense.MarkNearestPlayerDiscImpulseActuator;
 import behaviour.puckmoveactuator.PuckMove;
 import behaviour.puckmoveactuator.implementations.defense.DefensePuckMoveActuatorOne;
 import behaviour.shotactuator.implementations.defense.DefenseShotActuatorOne;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.physics.Impulse;
 import game.physics.Shot;

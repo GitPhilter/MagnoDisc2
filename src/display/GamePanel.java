@@ -1,13 +1,13 @@
 package display;
 
-import game.Arena;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.Puck;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class GamePanel extends JPanel {
     Game game;
@@ -57,33 +57,40 @@ public class GamePanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(backgroundImage, 0, 0, width, height, this);
         // playerDiscs
-        for (PlayerDisc playerDisc : game.getPlayerDiscs()) {
-            g.setColor(playerDisc.getTeam().getJerseyColor());
-            int drawX = (int) playerDisc.getPosition().getX() + 50 - playerDisc.getRadius();
-            int drawY = (int) playerDisc.getPosition().getY() + 50 - playerDisc.getRadius();
-            int radius = playerDisc.getRadius();
-            int innerRadius = playerDisc.getInnerRadius();
-            if(playerDisc.hasPuck()){
-                g.setColor(playerDisc.getHasPuckColor());
-                g.fillOval(drawX, drawY, radius * 2, radius * 2);
+        ArrayList<PlayerDisc> playerDiscArrayList = game.getPlayerDiscs();
+        if(playerDiscArrayList != null){
+            for (PlayerDisc playerDisc : playerDiscArrayList) {
                 g.setColor(playerDisc.getTeam().getJerseyColor());
-                g.fillOval(drawX + (radius) - innerRadius, drawY + (radius - innerRadius), innerRadius * 2, innerRadius * 2);
-            } else {
-                g.fillOval(drawX, drawY, radius * 2, radius * 2);
+                int drawX = (int) playerDisc.getPosition().getX() + 50 - playerDisc.getRadius();
+                int drawY = (int) playerDisc.getPosition().getY() + 50 - playerDisc.getRadius();
+                int radius = playerDisc.getRadius();
+                int innerRadius = playerDisc.getInnerRadius();
+                if(playerDisc.hasPuck()){
+                    g.setColor(playerDisc.getHasPuckColor());
+                    g.fillOval(drawX, drawY, radius * 2, radius * 2);
+                    g.setColor(playerDisc.getTeam().getJerseyColor());
+                    g.fillOval(drawX + (radius) - innerRadius, drawY + (radius - innerRadius), innerRadius * 2, innerRadius * 2);
+                } else {
+                    g.fillOval(drawX, drawY, radius * 2, radius * 2);
+                }
+                g.setColor(Color.BLACK);
+                g.drawOval(drawX, drawY, radius * 2, radius * 2);
+                g.drawOval(drawX + (radius) - innerRadius, drawY + (radius - innerRadius), innerRadius * 2, innerRadius * 2);
             }
-            g.setColor(Color.BLACK);
-            g.drawOval(drawX, drawY, radius * 2, radius * 2);
-            g.drawOval(drawX + (radius) - innerRadius, drawY + (radius - innerRadius), innerRadius * 2, innerRadius * 2);
         }
+
         // puck
         Puck puck = game.getPuck();
-        g.setColor(puck.getBasicColor());
-        //System.out.println("puck.position: " + puck.getPosition().toString());
-        int drawX = (int) (puck.getPosition().getX() + 50 - puck.getRadius());
-        int drawY = (int) (puck.getPosition().getY() + 50 - puck.getRadius());
-        int radius = puck.getRadius();
-        g.fillOval(drawX, drawY, radius * 2, radius * 2);
-        g.setColor(Color.BLACK);
-        g.drawOval(drawX, drawY, radius * 2, radius * 2);
+        if(puck != null){
+            g.setColor(puck.getBasicColor());
+            //System.out.println("puck.position: " + puck.getPosition().toString());
+            int drawX = (int) (puck.getPosition().getX() + 50 - puck.getRadius());
+            int drawY = (int) (puck.getPosition().getY() + 50 - puck.getRadius());
+            int radius = puck.getRadius();
+            g.fillOval(drawX, drawY, radius * 2, radius * 2);
+            g.setColor(Color.BLACK);
+            g.drawOval(drawX, drawY, radius * 2, radius * 2);
+        }
+
     }
 }

@@ -7,7 +7,7 @@ import behaviour.implementations.attack.score.StandardScoreBehaviour;
 import behaviour.implementations.general.MoveBackBehaviour;
 import behaviour.implementations.general.MoveForwardBehaviour;
 import behaviourselector.BehaviourSelector;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.TeamEnum;
 
@@ -36,7 +36,8 @@ public class StandardAttackSelector extends BehaviourSelector {
         // no puck
         double xReference = 0;
         if(playerDisc.getTeam().getTeamEnum() == TeamEnum.HOME) xReference = game.getWidth();
-        if(Math.abs(playerDisc.getPosition().getX() - xReference) <= 100) {
+        if((previousBehaviour == behaviours[3] && Math.abs(playerDisc.getPosition().getX() - xReference) < 400) ||
+        Math.abs(playerDisc.getPosition().getX() - xReference) <= 200) {
             previousBehaviour = behaviours[3];
             return behaviours[3];
         }

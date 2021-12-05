@@ -1,13 +1,11 @@
 package behaviourselector.implementations.wait;
 
 import behaviour.Behaviour;
-import behaviour.helpers.PlayerDiscRelations;
 import behaviour.implementations.EmptyBehaviour;
 import behaviour.implementations.general.HoldDefaultPositionBehaviour;
 import behaviour.implementations.general.MoveAwayFromClosestPlayerDiscBehaviour;
-import behaviour.implementations.general.MoveTowardsPuckBehaviour;
 import behaviourselector.BehaviourSelector;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 import game.physics.Position;
 

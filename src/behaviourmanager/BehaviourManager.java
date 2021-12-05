@@ -1,13 +1,9 @@
 package behaviourmanager;
 
 import behaviour.Behaviour;
-import behaviour.implementations.attack.AttackBehaviourOne;
-import behaviour.implementations.defense.DefenseBehaviourOne;
-import behaviour.implementations.freeball.FreeBallBehaviourOne;
-import behaviour.implementations.wait.WaitBehaviourOne;
 import behaviourselector.BehaviourSelector;
 import behaviourselector.implementations.EmptyBehaviourSelector;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
 
 public abstract class BehaviourManager implements BehaviourManagerInterface{
@@ -57,15 +53,15 @@ public abstract class BehaviourManager implements BehaviourManagerInterface{
     }
 
     protected void updateTacticState(){
-        if(game.getPuck().getControllingPlayerDisc() == null){
+        if(game.getPuck() != null && game.getPuck().getControllingPlayerDisc() == null){
             tacticState = TacticState.FREE_BALL;
             return;
         }
-        if(game.getPuck().getControllingPlayerDisc().getTeam() == playerDisc.getTeam()){
+        if(game.getPuck() != null && game.getPuck().getControllingPlayerDisc().getTeam() == playerDisc.getTeam()){
             tacticState = TacticState.ATTACK;
             return;
         }
-        if(game.getPuck().getControllingPlayerDisc().getTeam() != playerDisc.getTeam()){
+        if(game.getPuck() != null && game.getPuck().getControllingPlayerDisc().getTeam() != playerDisc.getTeam()){
             tacticState = TacticState.DEFENSE;
             return;
         }

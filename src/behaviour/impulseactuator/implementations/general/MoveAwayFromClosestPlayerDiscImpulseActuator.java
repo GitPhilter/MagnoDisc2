@@ -2,9 +2,8 @@ package behaviour.impulseactuator.implementations.general;
 
 import behaviour.helpers.PlayerDiscRelations;
 import behaviour.impulseactuator.ImpulseActuator;
-import game.Game;
+import game.game.Game;
 import game.PlayerDisc;
-import game.TeamEnum;
 import game.physics.Direction;
 import game.physics.Impulse;
 
