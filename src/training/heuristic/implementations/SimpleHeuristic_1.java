@@ -15,16 +15,11 @@ public class SimpleHeuristic_1 extends Heuristic {
     public double getHeuristicValue(GameState gameState, TeamEnum teamEnum){
         int heuristicValue = 0;
         // check for puck possession
-        if(gameState.getPuckControllingPlayerDiscName() == null) {
+        if(gameState.getPuckControllingPlayerDiscIndex() == -1) {
             //
         } else {
-            boolean owningThePuck = false;
-            for(PlayerDiscState pds : gameState.getPlayerDiscStates()){
-                if(pds.getName().equals(gameState.getPuckControllingPlayerDiscName())){
-                    if(pds.getTeamEnum() == teamEnum) owningThePuck = true;
-                }
-            }
-            if(owningThePuck){
+
+            if(gameState.getPlayerDiscStates()[gameState.getPuckControllingPlayerDiscIndex()].getTeamEnum() == teamEnum){
                 heuristicValue += 4;
             } else {
                 heuristicValue += -4;

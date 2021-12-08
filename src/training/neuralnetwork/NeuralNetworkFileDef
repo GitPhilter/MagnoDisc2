@@ -1,0 +1,22 @@
+NeuralNetworkFiles:
+.nnf
+
+contain the 4 matrices of a neural network in the following form:
+
+
+weightsIH
+#
+weightsHO
+#
+biasH
+#
+biasO
+
+where every of the matrices is put like the following:
+
+1,2,3,4
+5,6,7,8
+9,10,11,12
+
+where every line in the file equals a row in the matrix. the individual numbers are divided
+by commas.

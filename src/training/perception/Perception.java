@@ -3,7 +3,7 @@ package training.perception;
 
 import training.gamestate.GameState;
 
-public class Perception {
+public class Perception implements Comparable {
     private final GameState gameState; // gameState at the beginning of the perception window
     private final String playerDiscName;
     private final String finalBehaviourRepresentation;
@@ -12,7 +12,7 @@ public class Perception {
     private final double initialHeuristicValue;
     private final double resultingHeuristicValue;
 
-    public Perception(GameState gameState, String playerDiscName, String finalBehaviourRepresentation,
+    public Perception (GameState gameState, String playerDiscName, String finalBehaviourRepresentation,
                       int behaviourTickTime, String heuristicName, double initialHeuristicValue,
                       double resultingHeuristicValue){
         this.gameState = gameState;
@@ -63,4 +63,15 @@ public class Perception {
         return result;
     }
 
+    public String getGainStringShort(){
+        return "Perception: Gain = " + (resultingHeuristicValue - initialHeuristicValue);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Perception p = (Perception)o;
+        double thisGain = resultingHeuristicValue - initialHeuristicValue;
+        double pGain = p.getResultingHeuristicValue() - p.getInitialHeuristicValue();
+        return Double.compare(thisGain, pGain);
+    }
 }

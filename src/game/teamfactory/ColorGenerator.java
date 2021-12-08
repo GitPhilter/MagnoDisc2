@@ -12,6 +12,6 @@ public final class ColorGenerator {
     }
 
     private static int getRandomRGBInt(){
-        return (int)(Math.random() * 259);
+        return (int)(Math.random() * 255);
     }
 }

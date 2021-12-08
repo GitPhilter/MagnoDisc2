@@ -8,7 +8,7 @@ public class FinalShotActuator extends ShotActuator {
     private final double xDir;
     private final double yDir;
     private final double speed;
-    boolean empty;
+    private boolean empty;
 
 
     public FinalShotActuator(double xDir, double yDir, double speed, boolean empty){
@@ -27,5 +27,9 @@ public class FinalShotActuator extends ShotActuator {
     public String getRepresentationString() {
         if (empty) return "[]";
         return "[(" + xDir + "," + yDir + ")," + speed + "]";
+    }
+
+    public boolean isEmpty(){
+        return empty;
     }
 }

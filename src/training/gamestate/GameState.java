@@ -14,7 +14,7 @@ public class GameState {
     private final Position puckPosition;
     private final Direction puckDirection;
     private final double puckSpeed;
-    private final String puckControllingPlayerDiscName;
+    private int puckControllingPlayerDiscIndex = -1;
     // playerDiscs
     private final PlayerDiscState[] playerDiscStates;
 
@@ -24,6 +24,12 @@ public class GameState {
         this.gameHeight = game.getHeight();
         this.numberOfHomeGoals = game.getNumberOfHomeGoals();
         this.numberOfAwayGoals = game.getNumberOfAwayGoals();
+        // player discs
+        int numberOfDiscs = game.getPlayerDiscs().size();
+        this.playerDiscStates = new PlayerDiscState[numberOfDiscs];
+        for(int i = 0;i < game.getPlayerDiscs().size(); ++i){
+            playerDiscStates[i] = new PlayerDiscState(game.getPlayerDiscs().get(i));
+        }
         // puck
         this.puckPosition = new Position(game.getPuck().getPosition().getX(),
                 game.getPuck().getPosition().getY());
@@ -31,16 +37,15 @@ public class GameState {
                 game.getPuck().getPosition().getY());
         this.puckSpeed = game.getPuck().getSpeed();
         if(game.getPuck().getControllingPlayerDisc() == null){
-            this.puckControllingPlayerDiscName = null;
+            this.puckControllingPlayerDiscIndex = -1;
         } else {
-            this.puckControllingPlayerDiscName = game.getPuck().getControllingPlayerDisc().getName();
+            for(int i = 0; i < playerDiscStates.length; ++i){
+                if(game.getPuck().getControllingPlayerDisc().getName().equals(playerDiscStates[i].getName())){
+                    puckControllingPlayerDiscIndex = i;
+                }
+            }
         }
-        // player discs
-        int numberOfDiscs = game.getPlayerDiscs().size();
-        this.playerDiscStates = new PlayerDiscState[numberOfDiscs];
-        for(int i = 0;i < game.getPlayerDiscs().size(); ++i){
-            playerDiscStates[i] = new PlayerDiscState(game.getPlayerDiscs().get(i));
-        }
+
     }
 
     public int getGameWidth() {
@@ -71,8 +76,8 @@ public class GameState {
         return puckSpeed;
     }
 
-    public String getPuckControllingPlayerDiscName() {
-        return puckControllingPlayerDiscName;
+    public int getPuckControllingPlayerDiscIndex() {
+        return puckControllingPlayerDiscIndex;
     }
 
     public PlayerDiscState[] getPlayerDiscStates() {
@@ -86,7 +91,7 @@ public class GameState {
         result += "(" + gameWidth + " * " + gameHeight + ")\n";
         // puck
         result += "Puck Position: " + puckPosition + ", Direction: " + puckDirection + ", Speed: " + puckSpeed;
-        result += "Puck controlled by: " + puckControllingPlayerDiscName;
+        result += "Puck controlled by: " + puckControllingPlayerDiscIndex;
         for(PlayerDiscState pds : playerDiscStates){
             result += "" + pds + "\n";
         }
